@@ -20,4 +20,5 @@
  - I prefer and can only recommend ProtonVPN.
 
 # Additional Information
- If you found a bug please report it on Github.
+ - If you found a bug please report it on Github.
+ - I can't guarantee if this script works on non Windows systems.
