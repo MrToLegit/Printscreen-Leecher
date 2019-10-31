@@ -1,6 +1,7 @@
 # Features
  - You can leech for random screenshots from Printscreen without anything to do.
  - This Tool is very easy to use.
+ - Graphical user interface
 
 # Installation and first run
  - First make sure that python3 is installed on your computer.
