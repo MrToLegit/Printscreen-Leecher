@@ -18,5 +18,5 @@
  - Use a VPN for your own security. 
  - I prefer and can only recommend ProtonVPN.
 
-# Additionally Information
+# Additional Information
  If you found a bug please report it on Github.
