@@ -17,9 +17,9 @@ def id_generator(size=6, chars=string.ascii_lowercase + string.digits):
 scanned = []
 
 def writeoutput():
-    if os.path.isfile(os.path.dirname(__file__) + "//output.txt"):
-        os.remove(os.path.dirname(__file__) + "//output.txt")
-    f=open(os.path.dirname(__file__) + "//output.txt", "a+")
+    if os.path.isfile(os.path.dirname(__file__) + "/output.txt"):
+        os.remove(os.path.dirname(__file__) + "/output.txt")
+    f=open(os.path.dirname(__file__) + "/output.txt", "a+")
     for s in scanned:
         f.write(s + "\n")
 
