@@ -4,7 +4,7 @@
 
 # Installation and first run
  - First make sure that python3 is installed on your computer.
- - Second you run 'installation.bat' to install all required components.
+ - Second you run 'install.bat' to install all required components.
  - Then you can simply run this program in CMD with 'py leecher.py' or you run the run.bat file.
 
 # Requirements
