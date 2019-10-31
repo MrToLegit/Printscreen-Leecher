@@ -3,8 +3,8 @@
  - This Tool is very easy to use.
 
 # Installation and first run
- - Firstly make shure that python3 is installed on your computer.
- - Secondly you run 'installation.bat' to install all required components.
+ - First make sure that python3 is installed on your computer.
+ - Second you run 'installation.bat' to install all required components.
  - Then you can simply run this program in CMD with 'py leecher.py' or you run the run.bat file.
 
 # Requirements
@@ -15,8 +15,8 @@
 
 # Is it safe to use? And is it legal?
  - Yes, you can not get into trouble as these pictures are online and you have not done anything criminal. 
- - Use a VPN for your own security. 
+ - Use a VPN for your own security.(Optional) 
  - I prefer and can only recommend ProtonVPN.
 
-# Additionally Information
+# Additional Information
  If you found a bug please report it on Github.
