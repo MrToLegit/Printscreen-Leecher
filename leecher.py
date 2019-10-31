@@ -17,9 +17,9 @@ def id_generator(size=6, chars=string.ascii_lowercase + string.digits):
 scanned = []
 
 def writeoutput():
-    if os.path.isfile(str(Path.home()) + "/Desktop/output.txt"):
-        os.remove(str(Path.home()) + "/Desktop/output.txt")
-    f=open(str(Path.home()) + "/Desktop/output.txt", "a+")
+    if os.path.isfile(os.path.realpath(__file__) + "/output.txt"):
+        os.remove(os.path.realpath(__file__) + "/output.txt")
+    f=open(os.path.realpath(__file__) + "/output.txt", "a+")
     for s in scanned:
         f.write(s + "\n")
 
@@ -29,6 +29,11 @@ openweb = input("Do you want to open automatically the links? [y/n]: ")
 
 while openweb != "y" and openweb != "n":
     openweb = input("Do you want to open automatically the links? [y/n]: ") 
+
+saveoutput = input("Do you want to open automatically the links? [y/n]: ")
+
+while saveoutput != "y" and saveoutput != "n":
+    saveoutput = input("Do you want to save the founded links? [y/n]: ") 
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
@@ -59,4 +64,5 @@ for i in range(int(maxscanns), 0, -1):
                 webbrowser.open_new_tab(val)
             print(val)
             scanned.append(val)
-            writeoutput()
+            if saveoutput == "y" or saveoutput == "Y":
+                writeoutput()
