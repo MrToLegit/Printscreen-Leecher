@@ -1,4 +1,3 @@
-from urllib.request import Request, urlopen
 import random
 import string
 from time import sleep
@@ -9,26 +8,18 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import *
+import sys
+import threading
+import winsound
 
 
 def id_generator(size=6, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
+
 scanned = []
-
-#def writeoutput():
-#    if os.path.isfile(os.path.dirname(__file__) + "/output.txt"):
-#        os.remove(os.path.dirname(__file__) + "/output.txt")
-#    f=open(os.path.dirname(__file__) + "/output.txt", "a+")
-#    for s in scanned:
-#        f.write(s + "\n")
-
-
-maxscanns = input("Enter how much scans do you want do run: ")
-openweb = input("Do you want to open automatically the links? [y/n]: ")
-
-while openweb != "y" and openweb != "n":
-    openweb = input("Do you want to open automatically the links? [y/n]: ") 
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
@@ -36,26 +27,119 @@ chrome_options.add_argument('--disable-gpu')
 
 driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=chrome_options)
 
-for i in range(int(maxscanns), 0, -1):
-    sleep(0.001)
-    link = "https://prnt.sc/"+id_generator()
-    if not link in scanned:
-        req = Request(link, headers={'User-Agent': 'Mozilla/5.0'})
-        webpage = urlopen(req).read().decode("utf8")
+
+# GUI START
+def center(self):
+    frameGm = self.frameGeometry()
+    screen = QApplication.desktop().screenNumber(
+        QApplication.desktop().cursor().pos())
+    centerPoint = QApplication.desktop().screenGeometry(screen).center()
+    frameGm.moveCenter(centerPoint)
+    self.move(frameGm.topLeft())
 
 
-        driver.get(link)
-        try:
-            org = driver.find_element_by_id('screenshot-image')
-            # Find the value of org?
-            val = org.get_attribute("src")
-            if not ".png" in val:
-                continue
-        except:
-            print("Not Found: " + link)
+app = QApplication(sys.argv)
 
-        if '<div class="under-image">' in webpage:
-            if openweb == "y" or openweb == "Y" and ".png" in val:
-                webbrowser.open_new_tab(val)
-            print(val)
-            scanned.append(val)
+w = QWidget()
+w.resize(300, 200)
+center(w)
+
+btn = QPushButton('Quit', w)
+btn.clicked.connect(QApplication.instance().quit)
+btn.resize(btn.sizeHint())
+btn.move(w.width() / 2 - btn.width()/2, w.height() - 35)
+
+btnsave = QPushButton('Start Leecher', w)
+btnsave.clicked.connect(lambda: onclickstartleecher())
+btnsave.resize(btnsave.sizeHint())
+btnsave.move(w.width() / 2 - btnsave.width()/2, 105)
+
+btnload = QPushButton('Stop Leecher', w)
+btnload.clicked.connect(lambda: onclickstopleecher())
+btnload.resize(btnload.sizeHint()) 
+btnload.move(w.width() / 2 - btnload.width()/2, 135) 
+btnload.setEnabled(False)
+
+label = QLabel('Enter scans amount:', w)
+label.resize(150,20)
+label.move(w.width() / 2 - label.width()/2, 5) 
+
+scansinput = QLineEdit(w)
+scansinput.resize(150, 20)
+scansinput.move(w.width() / 2 - scansinput.width()/2, 30) 
+rx = QtCore.QRegExp("[0-9_]+")
+scansinput.setValidator(QtGui.QRegExpValidator(rx))
+scansinput.setMaxLength(2)
+
+checkbox = QCheckBox('Open in Browser', w)
+checkbox.resize(150, 20)
+checkbox.move(w.width() / 2 - checkbox.width()/2, 55) 
+checkbox.setChecked(1)
+
+saveoutput = QCheckBox('Save output', w)
+saveoutput.resize(150, 20)
+saveoutput.move(w.width() / 2 - saveoutput.width()/2, 75) 
+saveoutput.setChecked(1)
+
+def startleecher(arg):
+    for i in range(int(scansinput.text()), 0, -1):
+        t = threading.currentThread()
+        if not getattr(t, "do_run", True):
+            break
+        sleep(0.001)
+        link = "https://prnt.sc/"+id_generator()
+        if not link in scanned:
+            try:
+                driver.get(link)
+                org = driver.find_element_by_id('screenshot-image')
+                # Find the value of org?
+                val = org.get_attribute("src")
+                if not ".png" in val:
+                    continue
+                if ".png" in val:
+                    if checkbox.isChecked():
+                        webbrowser.open_new_tab(val)
+                    print(val)
+                    scanned.append(val)
+            except:
+                print("Not Found: " + link)
+    btnsave.setEnabled(True)
+    sleep(0.1)
+    btnload.setEnabled(False)
+    btn.setEnabled(True)
+
+    if saveoutput.isChecked():
+        f = open(str(Path.home()) + "\\Desktop\\output.txt", "+a")
+        for s in scanned:
+            f.write(s + "\n")
+        print("Output file saved. '"+str(Path.home()) + "\\Desktop\\output.txt"+"'")
+
+threadleecher = None
+
+def onclickstartleecher():
+    if scansinput.text() != "" and int(scansinput.text()) <= 50:
+        global threadleecher
+        threadleecher = threading.Thread(target=startleecher, args=("task",))
+        threadleecher.start()
+        btnsave.setEnabled(False)
+        sleep(0.1)
+        btnload.setEnabled(True)
+        btn.setEnabled(False)
+    else:
+        print("No scan number found or number is to big!")
+        scansinput.setFocus(True)
+
+def onclickstopleecher():
+    threadleecher.do_run = False
+    threadleecher.join()
+    btnload.setEnabled(False)
+    sleep(0.2)
+    btnsave.setEnabled(True)
+    btn.setEnabled(True)
+
+
+w.setWindowTitle('prnt.sc Leecher by ToLegit')
+w.setFixedSize(w.size())
+w.show()
+
+sys.exit(app.exec_())
