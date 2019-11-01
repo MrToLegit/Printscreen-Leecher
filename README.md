@@ -1,6 +1,7 @@
 # Features
  - You can leech for random screenshots from Printscreen without anything to do.
  - This Tool is very easy to use.
+ - Graphical user interface
 
 # Installation and first run
  - First make sure that python3 is installed on your computer.
@@ -19,4 +20,5 @@
  - I prefer and can only recommend ProtonVPN.
 
 # Additional Information
- If you found a bug please report it on Github.
+ - If you found a bug please report it on Github.
+ - I can't guarantee if this script works on non Windows systems.
