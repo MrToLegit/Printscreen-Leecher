@@ -14,6 +14,8 @@ import sys
 import threading
 import winsound
 
+version = "1.0"
+
 
 def id_generator(size=6, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -25,7 +27,7 @@ chrome_options = Options()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--disable-gpu')
 
-driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=chrome_options)
+driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
 
 
 # GUI START
@@ -44,8 +46,13 @@ w = QWidget()
 w.resize(300, 200)
 center(w)
 
+def quitprogram():
+    app.quit
+    quit()
+    driver.service.stop()
+
 btn = QPushButton('Quit', w)
-btn.clicked.connect(QApplication.instance().quit)
+btn.clicked.connect(lambda: quitprogram())
 btn.resize(btn.sizeHint())
 btn.move(w.width() / 2 - btn.width()/2, w.height() - 35)
 
@@ -61,25 +68,33 @@ btnload.move(w.width() / 2 - btnload.width()/2, 135)
 btnload.setEnabled(False)
 
 label = QLabel('Enter scans amount:', w)
-label.resize(150,20)
+label.resize(120,20)
 label.move(w.width() / 2 - label.width()/2, 5) 
 
 scansinput = QLineEdit(w)
-scansinput.resize(150, 20)
+scansinput.resize(120, 20)
 scansinput.move(w.width() / 2 - scansinput.width()/2, 30) 
 rx = QtCore.QRegExp("[0-9_]+")
 scansinput.setValidator(QtGui.QRegExpValidator(rx))
 scansinput.setMaxLength(2)
 
 checkbox = QCheckBox('Open in Browser', w)
-checkbox.resize(150, 20)
+checkbox.resize(120, 20)
 checkbox.move(w.width() / 2 - checkbox.width()/2, 55) 
 checkbox.setChecked(1)
 
 saveoutput = QCheckBox('Save output', w)
-saveoutput.resize(150, 20)
+saveoutput.resize(120, 20)
 saveoutput.move(w.width() / 2 - saveoutput.width()/2, 75) 
 saveoutput.setChecked(1)
+
+label1 = QLabel('© 2019 by ToLegit', w)
+label1.resize(label1.sizeHint())
+label1.move(2, w.height() - 19) 
+
+label2 = QLabel('Public Version ' + version, w)
+label2.resize(label2.sizeHint())
+label2.move(w.width() - label2.width() - 2, w.height() - 19) 
 
 def startleecher(arg):
     for i in range(int(scansinput.text()), 0, -1):
@@ -138,7 +153,7 @@ def onclickstopleecher():
     btn.setEnabled(True)
 
 
-w.setWindowTitle('prnt.sc Leecher by ToLegit')
+w.setWindowTitle('Prnt.sc Leecher v' + version)
 w.setFixedSize(w.size())
 w.show()
 
